@@ -1,56 +1,54 @@
-import { useEffect, useState } from 'react'
-import { fetchCharacters } from '../api'
-import { Autocomplete, Stack, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { fetchCharacters } from '../api';
+import { Stack, TextField } from '@mui/material';
 import CharacterCard from '@/components/card';
 
 const Characters = () => {
     const [characters, setCharacters] = useState([]);
-    const [selectedCharacter, setSelectedCharacter] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        const getCharacters = async()=>{
-            const characters = await fetchCharacters();
-            setCharacters(characters);
+        const getCharacters = async () => {
+            const charactersData = await fetchCharacters();
+            setCharacters(charactersData);
         };
         getCharacters();
     }, []);
 
-    const handleCharacterSelect = (e,value)=>{
-        setSelectedCharacter(value);
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value.toLowerCase());
     };
 
-    const filteredCharacters = selectedCharacter ? 
-    characters.filter((character)=> character.name === selectedCharacter.name)
-    : characters;
+    const filteredCharacters = searchTerm
+        ? characters.filter(character => 
+              character.name.toLowerCase().includes(searchTerm)
+          )
+        : characters;
 
     return (
-    <Stack spacing = {2}>
-    <Autocomplete
-    id="combo-box"
-    options={characters}
-    getOptionLabel={(character)=> character.name} 
-    onChange={handleCharacterSelect}
-    sx={{width:300}}
-    size='small'
-    renderInput={(params)=>
-        <TextField 
-        {...params}
-        label="Character"/>}
-    />
-    <Stack 
-    spacing={{xs:1,sm:2}}
-    direction="row"
-    useFlexGap
-    flexWrap='wrap'
-    >
-    {filteredCharacters.map((character)=>(
-        <CharacterCard
-        key={character.id}
-        character={character}
-      />
-    ))}
-    </Stack>
-    </Stack>
-)}
+        <Stack spacing={2}>
+            <TextField
+                id="search-box"
+                label="Search Characters"
+                variant="outlined"
+                sx={{ width: 250 }}
+                onChange={handleSearchChange}
+            />
+            <Stack 
+                spacing={{ xs: 1, sm: 2 }}
+                direction="row"
+                useFlexGap
+                flexWrap='wrap'
+            >
+                {filteredCharacters.map((character) => (
+                    <CharacterCard
+                        key={character.id}
+                        character={character}
+                    />
+                ))}
+            </Stack>
+        </Stack>
+    );
+};
 
 export default Characters;
