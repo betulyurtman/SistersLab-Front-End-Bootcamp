@@ -18,13 +18,13 @@ function Pokemon() {
         }
     }, []);
 
-    let myLink = ''
+    let myLink = "";
 
-    if(pokemonItem?.sprites?.other) {
-        const {"official_artwork": link} = pokemonItem?.sprites?.other
-        myLink = link.front_default;
+    if (pokemonItem?.sprites?.other) {
+      const { "official-artwork": link } = pokemonItem?.sprites?.other;
+      myLink = link.front_default;
     }
-
+  
   return (
   <div>
         {pokemonItem && (

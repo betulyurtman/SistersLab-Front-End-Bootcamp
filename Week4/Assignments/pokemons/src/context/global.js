@@ -79,7 +79,7 @@ export const GlobalProvider = ({children}) => {
     const getPokemon = async (name) => {
         dispatch({tyoe: "LOADING"});
 
-        const response = await fetch(`${baseUrl}pokemon/&{name}`);
+        const response = await fetch(`${baseUrl}pokemon/${name}`);
         const data = await response.json();
 
         dispatch({type: "GET_POKEMON", payload: data});
