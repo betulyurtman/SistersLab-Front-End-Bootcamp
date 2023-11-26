@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { fetchCharacters } from '../api';
 import { Stack, TextField } from '@mui/material';
 import CharacterCard from '@/components/card';
+import { useRouter } from 'next/router';
 
 const Characters = () => {
     const [characters, setCharacters] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const router = useRouter();
 
     useEffect(() => {
         const getCharacters = async () => {
@@ -18,6 +20,10 @@ const Characters = () => {
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value.toLowerCase());
     };
+
+    const handleClick = (id) => {
+        router.push(`/characters/${id}`);
+      };
 
     const filteredCharacters = searchTerm
         ? characters.filter(character => 
@@ -44,6 +50,7 @@ const Characters = () => {
                     <CharacterCard
                         key={character.id}
                         character={character}
+                        handleClick={handleClick}
                     />
                 ))}
             </Stack>
