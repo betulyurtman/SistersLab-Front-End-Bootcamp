@@ -1,30 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Button } from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, IconButton, Typography, Button, Skeleton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const CharacterCard = ({ 
     character, 
     handleClick, 
+    loading,
     }) => {
     return (
         <Card key={character.id} sx={{width: '150px'}}>
-            <CardMedia component="img" alt="character" height="140" 
-            image={character.image}
-            />
+            {loading ?
+                <Skeleton variant='rectangular' width={300} height={150} />
+                : <CardMedia component="img" alt="character" height="140" animation="pulse"
+                image={character.image}/>
+            }
             <CardContent>
-                <Typography variant='h5' component="div">
+                {loading ? 
+                <Skeleton width={80} />
+                : <Typography variant='h5' component="div">
                     {character.name}
                 </Typography>
-                <Typography variant='body2' component="text.secondary">
+                }
+                {loading ?
+                <Skeleton width={60} />
+                : <Typography variant='body2' component="text.secondary">
                     {character.gender} {character.status}
                 </Typography>
+                }
             </CardContent> 
             <CardActions>
-                <IconButton aria-label="add to favorites">
+                {loading ? 
+                <Skeleton variant="circular" width={25} height={25}/>
+                : <IconButton aria-label="add to favorites">
                     <FavoriteIcon color="error"/>
                 </IconButton>
-                <Button size="small" variant="text" onClick={() => handleClick(character.id)}>Details</Button>
+                }
+                <Button size="small" variant="text" onClick={() => handleClick(character.id)}>{loading ? <Skeleton width={100} /> : 'Details'}
+                </Button>
             </CardActions>
         </Card>
     );
@@ -33,6 +46,7 @@ const CharacterCard = ({
 CharacterCard.propTypes = {
     character: PropTypes.object.isRequired,
     handleClick: PropTypes.func.isRequired,
+    loading: PropTypes.bool,
 };
 
 CharacterCard.defaultProps = {

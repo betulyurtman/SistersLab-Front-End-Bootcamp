@@ -7,12 +7,15 @@ import { useRouter } from 'next/router';
 const Characters = () => {
     const [characters, setCharacters] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true); 
     const router = useRouter();
 
     useEffect(() => {
         const getCharacters = async () => {
+            setLoading(true);
             const charactersData = await fetchCharacters();
             setCharacters(charactersData);
+            setLoading(false);
         };
         getCharacters();
     }, []);
@@ -51,6 +54,7 @@ const Characters = () => {
                         key={character.id}
                         character={character}
                         handleClick={handleClick}
+                        loading={loading}
                     />
                 ))}
             </Stack>
