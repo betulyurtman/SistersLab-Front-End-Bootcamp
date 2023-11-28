@@ -31,7 +31,7 @@ const CharacterCard = ({
                 </Typography>
                 }
             </CardContent> 
-            <CardActions>
+            {isFavorite && (<CardActions>
                 {loading ? 
                 <Skeleton variant="circular" width={25} height={25}/>
                 : <IconButton aria-label="add to favorites"
@@ -42,7 +42,7 @@ const CharacterCard = ({
                 }
                 <Button size="small" variant="text" onClick={() => handleClick(character.id)}>{loading ? <Skeleton width={100} /> : 'Details'}
                 </Button>
-            </CardActions>
+            </CardActions>)}
         </Card>
     );
 };
@@ -52,7 +52,7 @@ CharacterCard.propTypes = {
     handleClick: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     handleFavoriteToggle: PropTypes.func.isRequired,
-    isFavorite: PropTypes.object.isRequired,
+    isFavorite: PropTypes.func.isRequired,
 };
 
 CharacterCard.defaultProps = {
