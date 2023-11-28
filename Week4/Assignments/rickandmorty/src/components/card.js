@@ -7,6 +7,8 @@ const CharacterCard = ({
     character, 
     handleClick, 
     loading,
+    handleFavoriteToggle,
+    isFavorite
     }) => {
     return (
         <Card key={character.id} sx={{width: '150px'}}>
@@ -32,8 +34,10 @@ const CharacterCard = ({
             <CardActions>
                 {loading ? 
                 <Skeleton variant="circular" width={25} height={25}/>
-                : <IconButton aria-label="add to favorites">
-                    <FavoriteIcon color="error"/>
+                : <IconButton aria-label="add to favorites"
+                onClick={()=>handleFavoriteToggle(character.id)}
+                >
+                    <FavoriteIcon color={isFavorite(character.id) ? 'error' : 'disabled'}/>
                 </IconButton>
                 }
                 <Button size="small" variant="text" onClick={() => handleClick(character.id)}>{loading ? <Skeleton width={100} /> : 'Details'}
@@ -47,6 +51,8 @@ CharacterCard.propTypes = {
     character: PropTypes.object.isRequired,
     handleClick: PropTypes.func.isRequired,
     loading: PropTypes.bool,
+    handleFavoriteToggle: PropTypes.func.isRequired,
+    isFavorite: PropTypes.object.isRequired,
 };
 
 CharacterCard.defaultProps = {

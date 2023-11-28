@@ -9,7 +9,8 @@ const Characters = () => {
     const [characters, setCharacters] = useState([]);
     const [loading, setLoading] = useState(true); 
     const [searchText, setSearchText] = useState('');
-    const [searchBy, setSearchBy] = useState('name'); 
+    const [searchBy, setSearchBy] = useState('name');
+    const [favorites, setFavorites] = useState([]);
     
     useEffect(() => {
         const getCharacters = async () => {
@@ -19,6 +20,11 @@ const Characters = () => {
             setLoading(false);
         };
         getCharacters();
+
+        const storedFavorites = localStorage.getItem('favorites');
+        if (storedFavorites) {
+            setFavorites(JSON.parse(storedFavorites));
+        }
     }, []);
 
     const fetchCharacterData = async () => {
@@ -33,7 +39,7 @@ const Characters = () => {
 
     const handleClick = (id) => {
         router.push(`/characters/${id}`);
-      };
+    };
 
     const filteredCharacters = characters.filter((character) => {
     return (
@@ -42,6 +48,16 @@ const Characters = () => {
         character.gender.toLowerCase().includes(searchText.toLowerCase())
     );
     });
+
+    const handleFavoriteToggle = (id) => {
+        const newFavorites = favorites.includes(id) 
+            ? favorites.filter((favoriteID) => favoriteID !== id)
+            : [...favorites, id];
+        setFavorites(newFavorites);
+        localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    };
+
+    const isFavorite = (id) => favorites.includes(id);
 
     return (
         <Stack spacing={2}>
@@ -85,6 +101,8 @@ const Characters = () => {
                         character={character}
                         handleClick={handleClick}
                         loading={loading}
+                        handleFavoriteToggle={handleFavoriteToggle}
+                        isFavorite={isFavorite}
                     />
                 ))}
             </Stack>
